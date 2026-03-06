@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Iloilo Route Checker</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="manifest" href="manifest.json">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body{
+background: linear-gradient(135deg,#4facfe,#00f2fe);
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+.main-box{
+background:white;
+padding:30px;
+border-radius:15px;
+width:100%;
+max-width:500px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+.title{
+text-align:center;
+margin-bottom:20px;
+font-weight:bold;
+color:#0d6efd;
+}
+
+#output{
+margin-top:20px;
+}
+
+.route-card{
+background:#0d6efd;
+color:white;
+padding:15px;
+border-radius:10px;
+margin-bottom:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="main-box">
+
+<h3 class="title">Iloilo Route Saver</h3>
+
+<select id="route" class="form-select mb-3">
+
+<option value="Iloilo City - Zarraga">Iloilo City - Zarraga</option>
+
+<option value="Iloilo City - Pototan">Iloilo City - Pototan</option>
+
+<option value="Iloilo City - Dumangas">Iloilo City - Dumangas</option>
+
+<option value="Iloilo City - Barotac Nuevo">Iloilo City - Barotac Nuevo</option>
+
+<option value="Iloilo City - New Lucena">Iloilo City - New Lucena</option>
+
+</select>
+
+<div class="d-grid gap-2">
+
+<button onclick="saveRoute()" class="btn btn-success">Save Route</button>
+
+<button onclick="displayRoutes()" class="btn btn-dark">Show Saved Routes</button>
+
+</div>
+
+<div id="output"></div>
+
+</div>
+
+<script>
+
+if ('serviceWorker' in navigator) {
+navigator.serviceWorker.register('service-worker.js');
+}
+
+function saveRoute() {
+let route = document.getElementById("route").value;
+let routes = JSON.parse(localStorage.getItem("iloiloRoutes")) || [];
+routes.push(route);
+localStorage.setItem("iloiloRoutes", JSON.stringify(routes));
+alert("Route Saved!\n" + route);
+}
+
+function displayRoutes() {
+
+let routes = JSON.parse(localStorage.getItem("iloiloRoutes")) || [];
+
+let output = document.getElementById("output");
+
+output.innerHTML="";
+
+if(routes.length===0){
+output.innerHTML="<p class='text-center mt-3'>No routes saved.</p>";
+return;
+}
+
+routes.forEach(function(route){
+
+output.innerHTML+=`
+<div class="route-card">
+<strong>Saved Route:</strong><br>
+${route}
+</div>
+`;
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
